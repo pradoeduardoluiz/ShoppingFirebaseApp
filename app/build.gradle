@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'com.google.gms.google-services'
 
 android {
   compileSdkVersion 29
@@ -34,9 +35,16 @@ dependencies {
   def navigation_version = '2.3.0'
   def material_version = "1.1.0"
   def epoxy_version = '3.11.0'
+  def firebase_version = '17.4.4'
+  def firebase_firestore_version = '21.5.0'
 
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+  //Firebase
+  implementation "com.google.firebase:firebase-analytics:$firebase_version"
+  implementation "com.google.firebase:firebase-core:$firebase_version"
+  implementation "com.google.firebase:firebase-firestore:$firebase_firestore_version"
 
   // Koin
   implementation "org.koin:koin-core:$koin_version"
