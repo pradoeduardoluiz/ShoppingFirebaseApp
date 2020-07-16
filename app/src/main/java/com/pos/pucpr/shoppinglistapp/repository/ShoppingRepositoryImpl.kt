@@ -17,8 +17,8 @@ class ShoppingRepositoryImpl(private val service: FirebaseService) : ShoppingRep
     return service.getAll().map { list -> list.map { it.toModel() } }
   }
 
-  override suspend fun getById(id: String): Shopping? {
-    return null
+  override suspend fun getById(id: String): Flow<Shopping?> {
+    return service.getById(id = id).map { it?.toModel() }
   }
 
   override suspend fun deleteById(id: String) {

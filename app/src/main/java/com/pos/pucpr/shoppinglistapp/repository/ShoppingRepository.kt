@@ -8,7 +8,7 @@ interface ShoppingRepository {
 
   suspend fun getAll(): Flow<List<Shopping>>
 
-  suspend fun getById(id: String): Shopping?
+  suspend fun getById(id: String): Flow<Shopping?>
 
   suspend fun deleteById(id: String)
 

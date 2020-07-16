@@ -18,15 +18,20 @@ class FirebaseServiceImpl(private val database: FirebaseFirestore) : FirebaseSer
   }
 
   override suspend fun getAll(): Flow<List<ShoppingEntity>> {
-    val snapshot = database.collection(SHOPPING_KEY).get().await()
-    val shopping = snapshot.toObjects(ShoppingEntity::class.java)
     return flow {
+      val snapshot = database.collection(SHOPPING_KEY).get().await()
+      val shopping = snapshot.toObjects(ShoppingEntity::class.java)
       emit(shopping)
     }
   }
 
-  override suspend fun getById(id: String): Flow<ShoppingEntity> {
-    TODO("Not yet implemented")
+  override suspend fun getById(id: String): Flow<ShoppingEntity?> {
+    return flow {
+      val collection = database.collection(SHOPPING_KEY)
+      val snapshot = collection.document(id ?: "").get().await()
+      val shopping = snapshot.toObject(ShoppingEntity::class.java)
+      emit(shopping)
+    }
   }
 
   override suspend fun deleteById(id: String) {
@@ -34,9 +39,9 @@ class FirebaseServiceImpl(private val database: FirebaseFirestore) : FirebaseSer
   }
 
   override suspend fun update(shopping: ShoppingEntity): Flow<Unit> {
-    val collection = database.collection(SHOPPING_KEY)
-    collection.document(shopping.id ?: "").set(shopping, SetOptions.merge()).await()
     return flow {
+      val collection = database.collection(SHOPPING_KEY)
+      collection.document(shopping.id ?: "").set(shopping, SetOptions.merge()).await()
       emit(Unit)
     }
   }

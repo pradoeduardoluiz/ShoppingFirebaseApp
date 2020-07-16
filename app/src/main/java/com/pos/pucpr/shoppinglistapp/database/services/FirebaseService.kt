@@ -8,7 +8,7 @@ interface FirebaseService {
 
   suspend fun getAll(): Flow<List<ShoppingEntity>>
 
-  suspend fun getById(id: String): Flow<ShoppingEntity>
+  suspend fun getById(id: String): Flow<ShoppingEntity?>
 
   suspend fun deleteById(id: String)
 
