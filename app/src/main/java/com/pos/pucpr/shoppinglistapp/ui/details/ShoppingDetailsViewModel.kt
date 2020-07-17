@@ -9,9 +9,7 @@ import com.pos.pucpr.shoppinglistapp.domain.usecases.SaveShopping
 import com.pos.pucpr.shoppinglistapp.mappers.toModel
 import com.pos.pucpr.shoppinglistapp.mappers.toViewData
 import com.pos.pucpr.shoppinglistapp.ui.view_data.ShoppingViewData
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 class ShoppingDetailsViewModel(
@@ -21,9 +19,11 @@ class ShoppingDetailsViewModel(
 
   private val saveShoppingState: MutableLiveData<State<Unit>> = MutableLiveData()
   private val getShoppingState: MutableLiveData<State<Unit>> = MutableLiveData()
+  private val isSaveButtonEnabled: MutableLiveData<Boolean> = MutableLiveData()
   private var shopping = ShoppingViewData()
 
   val viewState = ShoppingDetailsViewState(
+    isSaveButtonEnabled = isSaveButtonEnabled,
     saveShoppingState = saveShoppingState,
     getShoppingState = getShoppingState
   )
@@ -31,12 +31,12 @@ class ShoppingDetailsViewModel(
   fun saveShopping() {
     viewModelScope.launch {
       saveShoppingState.postValue(State.loading())
-      flow<Unit> {
+      try {
         saveShopping.invoke(shopping = shopping.toModel()).collect {
           saveShoppingState.postValue(State.success(Unit))
         }
-      }.catch {
-        saveShoppingState.postValue(State.failed(message = "Error!!"))
+      } catch (e: Exception) {
+        saveShoppingState.postValue(State.failed(message = e.message ?: ""))
       }
     }
   }
@@ -44,16 +44,43 @@ class ShoppingDetailsViewModel(
   fun getShopping(id: String) {
     viewModelScope.launch {
       getShoppingState.postValue(State.loading())
-      flow<Unit> {
+      try {
         getShopping.invoke(id = id).collect { result ->
           result?.let {
             shopping = it.toViewData()
+            checkRequiredFields()
             getShoppingState.postValue(State.success(Unit))
           }
         }
-      }.catch {
-        getShoppingState.postValue(State.failed(message = "Error!!"))
+      } catch (e: Exception) {
+        getShoppingState.postValue(State.failed(message = e.message ?: ""))
       }
     }
+  }
+
+  fun afterNameChanged(name: String) {
+    shopping.name = name
+    checkRequiredFields()
+  }
+
+  fun afterAmountChanged(amount: Int) {
+    shopping.amount = amount
+    checkRequiredFields()
+  }
+
+  fun afterBrandChanged(brand: String) {
+    shopping.brand = brand
+    checkRequiredFields()
+  }
+
+  fun afterShelfLifeChanged(shelfLife: String) {
+    shopping.shelfLife = shelfLife
+    checkRequiredFields()
+  }
+
+  private fun checkRequiredFields() {
+    val isAllFieldsRequiredFilled =
+      shopping.name.isNotEmpty() && shopping.amount > 0 && shopping.brand.isNotEmpty()
+    isSaveButtonEnabled.postValue(isAllFieldsRequiredFilled)
   }
 }

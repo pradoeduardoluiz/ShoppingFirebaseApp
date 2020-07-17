@@ -8,9 +8,9 @@ class SaveShopping(private val repository: ShoppingRepository) {
 
   suspend fun invoke(shopping: Shopping): Flow<Unit> {
     return if (shopping.id.isNullOrEmpty()) {
-      repository.update(shopping = shopping)
-    } else {
       repository.add(shopping = shopping)
+    } else {
+      repository.update(shopping = shopping)
     }
   }
 

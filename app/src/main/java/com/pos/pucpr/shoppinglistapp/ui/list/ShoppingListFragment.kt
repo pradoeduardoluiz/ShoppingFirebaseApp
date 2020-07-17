@@ -6,14 +6,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.pos.pucpr.shoppinglistapp.common.State
+import com.pos.pucpr.shoppinglistapp.common.ext.observe
 import com.pos.pucpr.shoppinglistapp.databinding.ShoppingListFragmentBinding
+import com.pos.pucpr.shoppinglistapp.ui.list.controllers.ShoppingListController
+import com.pos.pucpr.shoppinglistapp.ui.view_data.ShoppingViewData
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class ShoppingListFragment : Fragment() {
+class ShoppingListFragment : Fragment(), ShoppingListController.OnClickListener {
 
   private val viewModel: ShoppingListViewModel by viewModel { parametersOf(findNavController()) }
   private lateinit var binding: ShoppingListFragmentBinding
+  private val controller: ShoppingListController by inject()
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    controller.setListener(listener = this)
+  }
 
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -23,19 +34,48 @@ class ShoppingListFragment : Fragment() {
     return binding.root
   }
 
+  override fun onResume() {
+    super.onResume()
+    viewModel.getAllShopping()
+  }
+
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
+    setupRecyclerView()
     subscribeObservers()
     subscribeListeners()
   }
 
-  private fun subscribeListeners() {
-    binding.fabAddItem.setOnClickListener {
-      viewModel.navigateToDetails()
+  private fun subscribeObservers() {
+    with(viewModel.viewState) {
+      observe(getAllShoppingState) { state ->
+//        when (state) {
+//          is State.Loading -> TODO()
+//          is State.Success -> TODO()
+//          is State.Failed -> TODO()
+//        }
+      }
+      observe(shopping) { list ->
+        controller.setData(list)
+      }
     }
   }
 
-  private fun subscribeObservers() {
+  private fun subscribeListeners() {
+    binding.fabAddItem.setOnClickListener {
+      viewModel.navigateToDetails(id = null)
+    }
+  }
+
+  private fun setupRecyclerView() {
+    binding.recyclerView.adapter = controller.adapter
+    binding.recyclerView.setHasFixedSize(true)
+  }
+
+  override fun onClickListener(shoppingItem: ShoppingViewData) {
+  }
+
+  override fun onDeleteListener(shoppingItem: ShoppingViewData) {
   }
 
 }
