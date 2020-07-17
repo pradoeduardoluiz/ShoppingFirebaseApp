@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.pos.pucpr.shoppinglistapp.common.State
+import com.pos.pucpr.shoppinglistapp.R
 import com.pos.pucpr.shoppinglistapp.common.ext.observe
+import com.pos.pucpr.shoppinglistapp.common.ext.showDialog
 import com.pos.pucpr.shoppinglistapp.databinding.ShoppingListFragmentBinding
 import com.pos.pucpr.shoppinglistapp.ui.list.controllers.ShoppingListController
 import com.pos.pucpr.shoppinglistapp.ui.view_data.ShoppingViewData
@@ -77,6 +78,21 @@ class ShoppingListFragment : Fragment(), ShoppingListController.OnClickListener 
   }
 
   override fun onDeleteListener(shoppingItem: ShoppingViewData) {
+    showDeleteDialog {
+      viewModel.deleteShopping(shoppingItem)
+    }
+  }
+
+  private fun showDeleteDialog(onConfirmed: () -> Unit) {
+    requireContext().showDialog(
+      title = R.string.title_delete_shopping,
+      message = R.string.message_delete_shopping,
+      positiveButton = R.string.action_confirm,
+      negativeButton = R.string.action_cancel,
+      onPositiveButtonClick = {
+        onConfirmed.invoke()
+      }
+    )
   }
 
 }

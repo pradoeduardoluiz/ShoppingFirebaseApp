@@ -42,6 +42,19 @@ class ShoppingListViewModel(
     }
   }
 
+  fun deleteShopping(shopping: ShoppingViewData) {
+    viewModelScope.launch {
+      deleteShoppingState.postValue(State.loading())
+      try {
+        deleteShopping.invoke(id = shopping.id)
+        deleteShoppingState.postValue(State.success(Unit))
+        getAllShopping()
+      } catch (e: Exception) {
+        deleteShoppingState.postValue(State.failed(message = e.message ?: ""))
+      }
+    }
+  }
+
   fun navigateToDetails(id: String?) {
     navController.navigate(
       ShoppingListFragmentDirections

@@ -47,7 +47,8 @@ class FirebaseServiceImpl(private val database: FirebaseFirestore) : FirebaseSer
   }
 
   override suspend fun deleteById(id: String) {
-    TODO("Not yet implemented")
+    val collection = database.collection(SHOPPING_KEY)
+    collection.document(id).delete()
   }
 
   override suspend fun update(shopping: ShoppingEntity) = flow {
