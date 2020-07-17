@@ -16,6 +16,12 @@ var uiModule: Module = module {
       deleteShopping = get()
     )
   }
-  viewModel { ShoppingDetailsViewModel(saveShopping = get(), getShopping = get()) }
+  viewModel { (navController: NavController) ->
+    ShoppingDetailsViewModel(
+      navController = navController,
+      saveShopping = get(),
+      getShopping = get()
+    )
+  }
   single { ShoppingListController() }
 }

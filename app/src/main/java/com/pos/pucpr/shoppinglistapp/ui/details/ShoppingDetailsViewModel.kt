@@ -3,6 +3,7 @@ package com.pos.pucpr.shoppinglistapp.ui.details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.pos.pucpr.shoppinglistapp.common.State
 import com.pos.pucpr.shoppinglistapp.domain.usecases.GetShopping
 import com.pos.pucpr.shoppinglistapp.domain.usecases.SaveShopping
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ShoppingDetailsViewModel(
+  private val navController: NavController,
   private val saveShopping: SaveShopping,
   private val getShopping: GetShopping
 ) : ViewModel() {
@@ -28,12 +30,15 @@ class ShoppingDetailsViewModel(
     getShoppingState = getShoppingState
   )
 
+  fun getShopping() = shopping
+
   fun saveShopping() {
     viewModelScope.launch {
       saveShoppingState.postValue(State.loading())
       try {
         saveShopping.invoke(shopping = shopping.toModel()).collect {
           saveShoppingState.postValue(State.success(Unit))
+          navController.navigateUp()
         }
       } catch (e: Exception) {
         saveShoppingState.postValue(State.failed(message = e.message ?: ""))

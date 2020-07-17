@@ -73,6 +73,7 @@ class ShoppingListFragment : Fragment(), ShoppingListController.OnClickListener 
   }
 
   override fun onClickListener(shoppingItem: ShoppingViewData) {
+    viewModel.navigateToDetails(shoppingItem.id)
   }
 
   override fun onDeleteListener(shoppingItem: ShoppingViewData) {
