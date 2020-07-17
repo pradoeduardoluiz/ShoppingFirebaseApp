@@ -88,6 +88,7 @@ class ShoppingDetailsFragment : Fragment() {
   }
 
   private fun updateView(shopping: ShoppingViewData) {
+    binding.textInputLayoutId.isVisible = true
     binding.editId.setText(shopping.id)
     binding.editName.setText(shopping.name)
     binding.editAmount.setText(shopping.amount.toString())
