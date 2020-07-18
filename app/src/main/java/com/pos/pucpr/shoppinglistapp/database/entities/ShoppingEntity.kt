@@ -5,5 +5,6 @@ data class ShoppingEntity(
   val name: String = "",
   val amount: Int = 0,
   val brand: String = "",
-  val shelfLife: String = ""
+  val shelfLife: String = "",
+  val userId: String = ""
 )

@@ -8,6 +8,8 @@
   <string name="hint_shelf_life">Validade</string>
   <string name="action_save">Salvar</string>
   <string name="hint_id">Id</string>
+  <string name="title_list_shopping">Lista de Compras</string>
+  <string name="title_details_shopping">Item</string>
 
   <string name="title_delete_shopping">Atenção</string>
   <string name="message_delete_shopping">Deseja realmente deletar a compra?</string>
@@ -15,4 +17,5 @@
   <string name="action_cancel">Cancelar</string>
   <string name="action_login_with_google">Login com Google</string>
   <string name="error_google_sign_in">Erro ao efetuar login com a conta do Google.</string>
+  <string name="menu_action_logout">Logout</string>
 </resources>

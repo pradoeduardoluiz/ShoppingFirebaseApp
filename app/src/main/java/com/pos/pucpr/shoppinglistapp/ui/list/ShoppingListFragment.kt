@@ -1,12 +1,12 @@
 package com.pos.pucpr.shoppinglistapp.ui.list
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.pos.pucpr.shoppinglistapp.R
+import com.pos.pucpr.shoppinglistapp.common.State
+import com.pos.pucpr.shoppinglistapp.common.ext.findAuth
 import com.pos.pucpr.shoppinglistapp.common.ext.findRouter
 import com.pos.pucpr.shoppinglistapp.common.ext.observe
 import com.pos.pucpr.shoppinglistapp.common.ext.showDialog
@@ -25,6 +25,7 @@ class ShoppingListFragment : Fragment(), ShoppingListController.OnClickListener 
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    setHasOptionsMenu(true)
     controller.setListener(listener = this)
   }
 
@@ -48,14 +49,27 @@ class ShoppingListFragment : Fragment(), ShoppingListController.OnClickListener 
     subscribeListeners()
   }
 
+  override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+    super.onCreateOptionsMenu(menu, inflater)
+    inflater.inflate(R.menu.main, menu)
+  }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    if (item.itemId == R.id.menu_sign_out) {
+      findAuth().signOut()
+      return true
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
   private fun subscribeObservers() {
     with(viewModel.viewState) {
       observe(getAllShoppingState) { state ->
-//        when (state) {
-//          is State.Loading -> TODO()
-//          is State.Success -> TODO()
-//          is State.Failed -> TODO()
-//        }
+        when (state) {
+          is State.Loading -> controller.setLoading(true)
+          is State.Success -> controller.setLoading(false)
+          is State.Failed -> controller.setLoading(false)
+        }
       }
       observe(shopping) { list ->
         controller.setData(list)

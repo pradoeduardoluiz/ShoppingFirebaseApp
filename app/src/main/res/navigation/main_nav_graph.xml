@@ -9,13 +9,13 @@
   <fragment
     android:id="@+id/loginFragment"
     android:name="com.pos.pucpr.shoppinglistapp.ui.login.LoginFragment"
-    android:label="login_fragment"
+    android:label=""
     tools:layout="@layout/login_fragment" />
 
   <fragment
     android:id="@+id/shoppingListFragment"
     android:name="com.pos.pucpr.shoppinglistapp.ui.list.ShoppingListFragment"
-    android:label="shopping_list_fragment"
+    android:label="@string/title_list_shopping"
     tools:layout="@layout/shopping_list_fragment">
     <action
       android:id="@+id/action_shoppingListFragment_to_shoppingDetailsFragment"
@@ -25,7 +25,7 @@
   <fragment
     android:id="@+id/shoppingDetailsFragment"
     android:name="com.pos.pucpr.shoppinglistapp.ui.details.ShoppingDetailsFragment"
-    android:label="shopping_details_fragment"
+    android:label="@string/title_details_shopping"
     tools:layout="@layout/shopping_details_fragment">
     <argument
       android:name="id"
