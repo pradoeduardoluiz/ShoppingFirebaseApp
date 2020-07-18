@@ -7,6 +7,12 @@
   tools:ignore="UnusedNavigation">
 
   <fragment
+    android:id="@+id/loginFragment"
+    android:name="com.pos.pucpr.shoppinglistapp.ui.login.LoginFragment"
+    android:label="login_fragment"
+    tools:layout="@layout/login_fragment" />
+
+  <fragment
     android:id="@+id/shoppingListFragment"
     android:name="com.pos.pucpr.shoppinglistapp.ui.list.ShoppingListFragment"
     android:label="shopping_list_fragment"

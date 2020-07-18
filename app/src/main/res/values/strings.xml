@@ -13,4 +13,6 @@
   <string name="message_delete_shopping">Deseja realmente deletar a compra?</string>
   <string name="action_confirm">Confirmar</string>
   <string name="action_cancel">Cancelar</string>
+  <string name="action_login_with_google">Login com Google</string>
+  <string name="error_google_sign_in">Erro ao efetuar login com a conta do Google.</string>
 </resources>

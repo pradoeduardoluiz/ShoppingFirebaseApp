@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.pos.pucpr.shoppinglistapp.R
+import com.pos.pucpr.shoppinglistapp.common.ext.findRouter
 import com.pos.pucpr.shoppinglistapp.common.ext.observe
 import com.pos.pucpr.shoppinglistapp.common.ext.showDialog
 import com.pos.pucpr.shoppinglistapp.databinding.ShoppingListFragmentBinding
@@ -74,7 +75,7 @@ class ShoppingListFragment : Fragment(), ShoppingListController.OnClickListener 
   }
 
   override fun onClickListener(shoppingItem: ShoppingViewData) {
-    viewModel.navigateToDetails(shoppingItem.id)
+    findRouter().showShoppingDetails(shoppingItem.id)
   }
 
   override fun onDeleteListener(shoppingItem: ShoppingViewData) {
